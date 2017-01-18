@@ -1,6 +1,6 @@
 #!/bin/sh
 
-diffJSFiles=$(git diff --stage --diff-filter=AM --name-only | grep ".js$" | xargs)
+diffJSFiles=$(git diff --staged --diff-filter=AM --name-only | grep ".js$" | xargs)
 if [[ $diffJSFiles == "" ]]
 then
 	exit 0
@@ -8,7 +8,8 @@ fi
 
 for f in $diffJSFiles
 do
-	git show :$f | eslint --stdin --stdin-filename=$f
+	echo $f
+	git show :$f | unix2dos | eslint --stdin --stdin-filename=$f
 	if [[ $? -ne 0 ]]
 	then
 		exit 1
